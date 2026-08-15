@@ -33,7 +33,7 @@ const projectFields = () => ({
 });
 
 export default config({
-  storage: { kind: 'local' },
+  storage: { kind: 'github', repo: 'gCarvalhoF/gabrielcf.com' },
   collections: {
     postsEn: collection({
       label: 'Posts (EN)',

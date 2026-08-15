@@ -11,10 +11,9 @@ services:
     environment:
       HOST: "0.0.0.0"
       PORT: "4321"
-      # Phase 4 (GitHub mode) will add here, runtime-only, never baked into the image:
-      #   KEYSTATIC_GITHUB_CLIENT_ID
-      #   KEYSTATIC_GITHUB_CLIENT_SECRET
-      #   KEYSTATIC_SECRET
+      KEYSTATIC_GITHUB_CLIENT_ID: ${KEYSTATIC_GITHUB_CLIENT_ID}
+      KEYSTATIC_GITHUB_CLIENT_SECRET: ${KEYSTATIC_GITHUB_CLIENT_SECRET}
+      KEYSTATIC_SECRET: ${KEYSTATIC_SECRET}
     restart: unless-stopped
     security_opt:
       - no-new-privileges
