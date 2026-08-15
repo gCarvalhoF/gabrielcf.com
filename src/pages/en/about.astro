@@ -1,18 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const about = (await getEntry('about', 'en'))!;
+const { Content } = await render(about);
 ---
 
 <BaseLayout lang="en" title="About" description="About Gabriel Carvalho — background, current focus, and how this site runs.">
   <article class="prose" style="padding-block: 2rem 3rem;">
     <h1>About</h1>
-    <p>
-      I'm a software engineer who also runs their own infrastructure — this site
-      included. It's built with Astro, edited through an in-browser CMS, and served
-      from a container I administer on a Proxmox box in my own home.
-    </p>
-    <p>
-      <em>Replace this paragraph with real background, current role, and whatever else
-      belongs on a first-impression page.</em>
-    </p>
+    <Content />
   </article>
 </BaseLayout>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const contact = (await getEntry('contact', 'index'))!;
+---
+
+<BaseLayout lang="en" title="Contact" description="Get in touch with Gabriel Carvalho.">
+  <article class="prose" style="padding-block: 2rem 3rem;">
+    <h1>Contact</h1>
+    <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem; font-size: 1.1rem;">
+      <li><a href={`mailto:${contact.data.email}`}>{contact.data.email}</a></li>
+      {contact.data.github && <li><a href={contact.data.github}>GitHub</a></li>}
+      {contact.data.linkedin && <li><a href={contact.data.linkedin}>LinkedIn</a></li>}
+    </ul>
+  </article>
+</BaseLayout>

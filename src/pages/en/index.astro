@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
+
+const home = (await getEntry('home', 'en'))!;
+const { Content: Bio } = await render(home);
 
 const projects = (await getCollection('projects', (e) => e.id.startsWith('en/')))
   .filter((p) => p.data.featured)
@@ -26,12 +29,9 @@ const jsonLd = {
   description="Software engineer. I build and run infrastructure I own, end to end."
   jsonLd={jsonLd}
 >
-  <section style="padding-block: 2rem 3rem;">
-    <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem;">Gabriel Carvalho</h1>
-    <p class="prose" style="font-size: 1.15rem; color: var(--color-text-muted);">
-      Software engineer. I build things end to end — including the hardware they run on.
-      This page is served from a container in my own rack.
-    </p>
+  <section class="prose" style="padding-block: 2rem 3rem; font-size: 1.15rem; color: var(--color-text-muted);">
+    <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem; color: var(--color-text);">{home.data.headline}</h1>
+    <Bio />
     <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
       <a href="/en/projects/" class="tag" style="padding: 0.4rem 1rem;">See projects</a>
       <a href="/en/about/" class="tag" style="padding: 0.4rem 1rem;">About me</a>

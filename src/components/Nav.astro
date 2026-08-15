@@ -5,8 +5,8 @@ interface Props {
 const { lang } = Astro.props;
 
 const copy = {
-  en: { home: 'Gabriel Carvalho', about: 'About', projects: 'Projects', blog: 'Blog', switch: 'PT' },
-  pt: { home: 'Gabriel Carvalho', about: 'Sobre', projects: 'Projetos', blog: 'Blog', switch: 'EN' },
+  en: { home: 'Gabriel Carvalho', about: 'About', projects: 'Projects', blog: 'Blog', contact: 'Contact', switch: 'PT' },
+  pt: { home: 'Gabriel Carvalho', about: 'Sobre', projects: 'Projetos', blog: 'Blog', contact: 'Contato', switch: 'EN' },
 };
 const t = copy[lang];
 const otherLang = lang === 'en' ? 'pt' : 'en';
@@ -23,6 +23,7 @@ const path = Astro.url.pathname.replace(/^\/(en|pt)/, '');
     <a href={`/${lang}/about/`}>{t.about}</a>
     <a href={`/${lang}/projects/`}>{t.projects}</a>
     <a href={`/${lang}/blog/`}>{t.blog}</a>
+    <a href={`/${lang}/contact/`}>{t.contact}</a>
     <a href={`/${otherLang}${path}`} aria-label={`Switch language to ${otherLang === 'en' ? 'English' : 'Portuguese'}`} style="border: 1px solid var(--color-border); border-radius: 999px; padding: 0.15rem 0.6rem; font-size: 0.8rem;">
       {t.switch}
     </a>

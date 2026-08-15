@@ -28,7 +28,7 @@ const jsonLd = {
   lang="en"
   title={post.data.title}
   description={post.data.description}
-  image={post.data.cover}
+  image={post.data.cover ?? undefined}
   type="article"
   jsonLd={jsonLd}
 >

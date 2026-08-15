@@ -1,19 +1,14 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const about = (await getEntry('about', 'pt'))!;
+const { Content } = await render(about);
 ---
 
 <BaseLayout lang="pt" title="Sobre" description="Sobre Gabriel Carvalho — trajetória, foco atual e como este site funciona.">
   <article class="prose" style="padding-block: 2rem 3rem;">
     <h1>Sobre</h1>
-    <p>
-      Sou engenheiro de software e também administro minha própria infraestrutura —
-      este site incluído. Ele é construído com Astro, editado por um CMS embutido no
-      navegador, e servido por um contêiner que administro numa máquina Proxmox na
-      minha casa.
-    </p>
-    <p>
-      <em>Substitua este parágrafo pela trajetória real, cargo atual e o que mais
-      fizer sentido numa página de primeira impressão.</em>
-    </p>
+    <Content />
   </article>
 </BaseLayout>
