@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', (e) => e.id.startsWith('pt/')))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+const posts = (await getCollection('posts', (e) => e.id.startsWith('pt/') && !e.data.draft))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Gabriel Carvalho',
+  url: 'https://gabrielcf.com/pt/',
+  jobTitle: 'Engenheiro de Software',
+  sameAs: [],
+};
+---
+
+<BaseLayout
+  lang="pt"
+  title="Gabriel Carvalho"
+  description="Engenheiro de software. Construo e opero a infraestrutura que uso, de ponta a ponta."
+  jsonLd={jsonLd}
+>
+  <section style="padding-block: 2rem 3rem;">
+    <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem;">Gabriel Carvalho</h1>
+    <p class="prose" style="font-size: 1.15rem; color: var(--color-text-muted);">
+      Engenheiro de software. Construo coisas de ponta a ponta — incluindo o hardware
+      onde elas rodam. Esta página é servida por um contêiner no meu próprio rack.
+    </p>
+    <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+      <a href="/pt/projects/" class="tag" style="padding: 0.4rem 1rem;">Ver projetos</a>
+      <a href="/pt/about/" class="tag" style="padding: 0.4rem 1rem;">Sobre mim</a>
+    </div>
+  </section>
+
+  {projects.length > 0 && (
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 1rem;">
+        Trabalhos selecionados
+      </h2>
+      <div style="display: grid; gap: 1rem;">
+        {projects.map((p) => (
+          <article class="card">
+            <h3 style="margin: 0 0 0.35rem;">{p.data.name}</h3>
+            <p style="margin: 0 0 0.5rem; color: var(--color-text-muted);">{p.data.summary}</p>
+            <div>
+              {p.data.stack.map((s) => <span class="tag">{s}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {posts.length > 0 && (
+    <section>
+      <h2 style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 1rem;">
+        Textos recentes
+      </h2>
+      <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+        {posts.map((post) => (
+          <li>
+            <a href={`/pt/blog/${post.id.replace('pt/', '')}/`} style="font-size: 1.05rem;">
+              {post.data.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</BaseLayout>

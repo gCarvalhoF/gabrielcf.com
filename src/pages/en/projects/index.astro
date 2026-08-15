@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', (e) => e.id.startsWith('en/')))
+  .sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+---
+
+<BaseLayout lang="en" title="Projects" description="Selected projects by Gabriel Carvalho.">
+  <h1 style="padding-top: 2rem;">Projects</h1>
+  <div style="display: grid; gap: 1rem; margin-top: 1.5rem; margin-bottom: 3rem;">
+    {projects.map((p) => (
+      <article class="card">
+        <h2 style="margin: 0 0 0.35rem;">{p.data.name}</h2>
+        <p style="margin: 0 0 0.5rem; color: var(--color-text-muted);">{p.data.summary}</p>
+        <div>
+          {p.data.stack.map((s) => <span class="tag">{s}</span>)}
+        </div>
+        <div style="margin-top: 0.75rem; display: flex; gap: 1rem; font-size: 0.9rem;">
+          {p.data.repoUrl && <a href={p.data.repoUrl}>Repo</a>}
+          {p.data.liveUrl && <a href={p.data.liveUrl}>Live</a>}
+          {p.data.writeupUrl && <a href={p.data.writeupUrl}>Write-up</a>}
+        </div>
+      </article>
+    ))}
+  </div>
+</BaseLayout>

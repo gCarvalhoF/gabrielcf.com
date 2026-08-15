@@ -1,0 +1,110 @@
+:root {
+  /* "Overcast" palette — Alice Blue ink on Iron Grey / Charcoal.
+     Powder Blue and Lavender Grey are both too light relative to Alice Blue to pass
+     AA as text on a light ground, so this only works as a dark theme. */
+  --color-bg: #343f3e;
+  --color-bg-raised: #505a5b;
+  --color-text: #dcedff;
+  --color-text-muted: #c5d1e3; /* Lavender Grey lightened toward Alice Blue — raw #8f91a2 fails AA on --color-bg-raised (2.0:1) */
+  --color-accent: #94b0da;
+  --color-accent-hover: #dcedff;
+  --color-border: #8f91a2;
+  --color-focus: #94b0da;
+
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --measure: 68ch;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.wrap {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.prose :is(p, ul, ol) {
+  max-width: var(--measure);
+}
+
+.prose img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+}
+
+.card {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+}
+
+.card a {
+  /* --color-accent only clears AA against --color-bg (4.9:1), not --color-bg-raised
+     (3.2:1) — links inside cards use --color-text instead, which passes on both. */
+  color: var(--color-text);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.15rem 0.65rem;
+  margin: 0 0.4rem 0.4rem 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0.5rem 1rem;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}

@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', (e) => e.id.startsWith('en/')))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
+
+const posts = (await getCollection('posts', (e) => e.id.startsWith('en/') && !e.data.draft))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Gabriel Carvalho',
+  url: 'https://gabrielcf.com/en/',
+  jobTitle: 'Software Engineer',
+  sameAs: [],
+};
+---
+
+<BaseLayout
+  lang="en"
+  title="Gabriel Carvalho"
+  description="Software engineer. I build and run infrastructure I own, end to end."
+  jsonLd={jsonLd}
+>
+  <section style="padding-block: 2rem 3rem;">
+    <h1 style="font-size: 2.25rem; margin-bottom: 0.75rem;">Gabriel Carvalho</h1>
+    <p class="prose" style="font-size: 1.15rem; color: var(--color-text-muted);">
+      Software engineer. I build things end to end — including the hardware they run on.
+      This page is served from a container in my own rack.
+    </p>
+    <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+      <a href="/en/projects/" class="tag" style="padding: 0.4rem 1rem;">See projects</a>
+      <a href="/en/about/" class="tag" style="padding: 0.4rem 1rem;">About me</a>
+    </div>
+  </section>
+
+  {projects.length > 0 && (
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 1rem;">
+        Selected work
+      </h2>
+      <div style="display: grid; gap: 1rem;">
+        {projects.map((p) => (
+          <article class="card">
+            <h3 style="margin: 0 0 0.35rem;">{p.data.name}</h3>
+            <p style="margin: 0 0 0.5rem; color: var(--color-text-muted);">{p.data.summary}</p>
+            <div>
+              {p.data.stack.map((s) => <span class="tag">{s}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {posts.length > 0 && (
+    <section>
+      <h2 style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); margin-bottom: 1rem;">
+        Recent writing
+      </h2>
+      <ul style="list-style: none; padding: 0; display: grid; gap: 0.75rem;">
+        {posts.map((post) => (
+          <li>
+            <a href={`/en/blog/${post.id.replace('en/', '')}/`} style="font-size: 1.05rem;">
+              {post.data.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</BaseLayout>

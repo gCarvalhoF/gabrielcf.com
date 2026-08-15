@@ -1,0 +1,15 @@
+---
+interface Props {
+  lang: 'en' | 'pt';
+}
+const { lang } = Astro.props;
+const copy = {
+  en: { text: 'Built by hand, hosted on my own hardware.' },
+  pt: { text: 'Feito à mão, hospedado no meu próprio hardware.' },
+};
+---
+
+<footer class="wrap" style="padding-block: 3rem 2rem; margin-top: 4rem; border-top: 1px solid var(--color-border); color: var(--color-text-muted); font-size: 0.9rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+  <span>&copy; {new Date().getFullYear()} Gabriel Carvalho</span>
+  <span>{copy[lang].text}</span>
+</footer>
