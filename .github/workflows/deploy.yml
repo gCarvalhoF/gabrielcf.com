@@ -1,0 +1,51 @@
+name: build-and-deploy
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch: {}
+
+env:
+  IMAGE: ghcr.io/gcarvalhof/gabrielcf.com
+  # Not secret (see docker-compose.yml / Dockerfile comments) — inlined at build time
+  # via Vite, so it must be a build arg either way; hardcoding here avoids needing
+  # another GitHub Actions permission scope just to read a non-secret repo variable.
+  PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: gabrielcf-keystatic
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          build-args: |
+            PUBLIC_KEYSTATIC_GITHUB_APP_SLUG=${{ env.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG }}
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull latest image and restart on personal-site.homelab
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new root@192.168.3.205 \
+            'cd /root/personal-site && docker compose pull && docker compose up -d'
