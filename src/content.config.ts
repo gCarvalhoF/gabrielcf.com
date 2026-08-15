@@ -2,6 +2,16 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'zod';
 
+// Keystatic's optional url() fields can come back as null (unset in yaml) or ''
+// (cleared via the admin UI) depending on the path that wrote them — neither is a
+// valid URL, so normalize both to undefined rather than failing z.string().url().
+const optionalUrl = () =>
+  z
+    .union([z.string().url(), z.literal('')])
+    .nullable()
+    .optional()
+    .transform((v) => (v ? v : undefined));
+
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.mdoc', base: './src/content/posts' }),
   schema: z.object({
@@ -23,9 +33,9 @@ const projects = defineCollection({
     summary: z.string(),
     role: z.string(),
     stack: z.array(z.string()).default([]),
-    repoUrl: z.string().url().nullable().optional(),
-    liveUrl: z.string().url().nullable().optional(),
-    writeupUrl: z.string().url().nullable().optional(),
+    repoUrl: optionalUrl(),
+    liveUrl: optionalUrl(),
+    writeupUrl: optionalUrl(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullable().optional(),
     featured: z.boolean().default(false),
@@ -48,8 +58,8 @@ const contact = defineCollection({
   loader: glob({ pattern: '*.yaml', base: './src/content/contact' }),
   schema: z.object({
     email: z.string(),
-    github: z.string().url().nullable().optional(),
-    linkedin: z.string().url().nullable().optional(),
+    github: optionalUrl(),
+    linkedin: optionalUrl(),
   }),
 });
 
